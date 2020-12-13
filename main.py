@@ -27,7 +27,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(lr=base_learning_rate),
               metrics=['accuracy'])
 model.summary()
 len(model.trainable_variables)
-initial_epochs = 5
+initial_epochs = 2
 
 loss0, accuracy0 = model.evaluate(validation_dataset)
 history = model.fit(train_dataset,
@@ -45,14 +45,14 @@ fine_tune_at = 5
 # Freeze all the layers before the `fine_tune_at` layer
 for layer in base_model.layers[:fine_tune_at]:
     layer.trainable = True
-fine_tune_epochs = 5
+fine_tune_epochs = 2
 total_epochs = initial_epochs + fine_tune_epochs
 
 history_fine = model.fit(train_dataset,
                          epochs=total_epochs,
                          initial_epoch=history.epoch[-1],
                          validation_data=validation_dataset)
-plot_history(history, model_name + '_FineTuning', initial_epochs=initial_epochs, is_fine_tuning=True)
+plot_history(history_fine, model_name + '_FineTuning', initial_epochs=initial_epochs, is_fine_tuning=True)
 ypre = model.predict(validation_dataset)
 
 for name, value in zip(model.metrics_names, ypre):
